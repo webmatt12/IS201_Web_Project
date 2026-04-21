@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe vs AI</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        background: #222;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .navbar a:hover {
+        text-decoration: underline;
+    }
+
+    h1 {
+        margin-top: 20px;
+    }
+
+    #controls {
+        margin-top: 10px;
+    }
+
+    select, button {
+        padding: 8px;
+        margin: 5px;
+        font-size: 1em;
+    }
+
+    #game {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        gap: 10px;
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+    .cell {
+        width: 100px;
+        height: 100px;
+        font-size: 2em;
+        background-color: white;
+        border: 2px solid #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+    }
+
+    .cell:hover {
+        background-color: #eaeaea;
+    }
+
+    .win {
+        background-color: #90ee90 !important;
+    }
+
+    #status {
+        margin-top: 15px;
+        font-size: 1.2em;
+    }
+
+    #scoreboard {
+        margin-top: 10px;
+        font-size: 1.1em;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<div class="navbar">
+    <a href="../index.html" id="top">Home Page</a> |
+    <a href="fromscratch.html">Scratch Page</a> |
+</div>
+
+<h1>Tic Tac Toe vs Computer</h1>
+
+<div id="controls">
+    Difficulty:
+    <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard" selected>Hard</option>
+    </select>
+
+    <button onclick="resetGame()">Restart</button>
+</div>
+
+<div id="scoreboard">
+    You: <span id="playerScore">0</span> |
+    Computer: <span id="aiScore">0</span> |
+    Draws: <span id="drawScore">0</span>
+</div>
+
+<div id="game"></div>
+
+<p id="status">Your turn (X)</p>
+
+<script>
+    const game = document.getElementById("game");
+    const statusText = document.getElementById("status");
+    const difficultySelect = document.getElementById("difficulty");
+
+    const playerScoreEl = document.getElementById("playerScore");
+    const aiScoreEl = document.getElementById("aiScore");
+    const drawScoreEl = document.getElementById("drawScore");
+
+    let board = Array(9).fill("");
+    let human = "X";
+    let ai = "O";
+    let gameActive = true;
+
+    let playerScore = 0;
+    let aiScore = 0;
+    let drawScore = 0;
+
+    const winCombos = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
+
+    function createBoard() {
+        game.innerHTML = "";
+        board.forEach((cell, index) => {
+            const div = document.createElement("div");
+            div.classList.add("cell");
+            div.dataset.index = index;
+            div.textContent = cell;
+            div.addEventListener("click", handleMove);
+            game.appendChild(div);
+        });
+    }
+
+    function handleMove(e) {
+        const index = e.target.dataset.index;
+        if (!gameActive || board[index]) return;
+
+        makeMove(index, human);
+
+        if (checkEnd(human)) return;
+
+        statusText.textContent = "Computer thinking...";
+
+        setTimeout(() => {
+            let move;
+
+            const difficulty = difficultySelect.value;
+
+            if (difficulty === "easy") {
+                move = randomMove();
+            } else if (difficulty === "medium") {
+                move = Math.random() < 0.5 ? randomMove() : minimax(board, ai).index;
+            } else {
+                move = minimax(board, ai).index;
+            }
+
+            makeMove(move, ai);
+            checkEnd(ai);
+        }, 300);
+    }
+
+    function makeMove(index, player) {
+        board[index] = player;
+        createBoard();
+    }
+
+    function checkEnd(player) {
+        const win = getWinningCombo(player);
+
+        if (win) {
+            highlightWin(win);
+
+            if (player === human) {
+                statusText.textContent = "You win!";
+                playerScore++;
+            } else {
+                statusText.textContent = "Computer wins!";
+                aiScore++;
+            }
+
+            updateScore();
+            gameActive = false;
+            return true;
+        }
+
+        if (!board.includes("")) {
+            statusText.textContent = "Draw!";
+            drawScore++;
+            updateScore();
+            gameActive = false;
+            return true;
+        }
+
+        statusText.textContent = player === human ? "Computer's turn" : "Your turn";
+        return false;
+    }
+
+    function getWinningCombo(player) {
+        return winCombos.find(combo =>
+            combo.every(i => board[i] === player)
+        );
+    }
+
+    function highlightWin(combo) {
+        combo.forEach(i => {
+            document.querySelectorAll(".cell")[i].classList.add("win");
+        });
+    }
+
+    function updateScore() {
+        playerScoreEl.textContent = playerScore;
+        aiScoreEl.textContent = aiScore;
+        drawScoreEl.textContent = drawScore;
+    }
+
+    function randomMove() {
+        const available = board
+            .map((v, i) => v === "" ? i : null)
+            .filter(v => v !== null);
+
+        return available[Math.floor(Math.random() * available.length)];
+    }
+
+    // -------- MINIMAX AI --------
+    function minimax(newBoard, player) {
+        const available = newBoard
+            .map((v, i) => v === "" ? i : null)
+            .filter(v => v !== null);
+
+        if (getWinnerState(newBoard, human)) return { score: -10 };
+        if (getWinnerState(newBoard, ai)) return { score: 10 };
+        if (available.length === 0) return { score: 0 };
+
+        let moves = [];
+
+        for (let i = 0; i < available.length; i++) {
+            let move = {};
+            move.index = available[i];
+
+            newBoard[available[i]] = player;
+
+            if (player === ai) {
+                move.score = minimax(newBoard, human).score;
+            } else {
+                move.score = minimax(newBoard, ai).score;
+            }
+
+            newBoard[available[i]] = "";
+            moves.push(move);
+        }
+
+        let bestMove;
+
+        if (player === ai) {
+            let bestScore = -Infinity;
+            moves.forEach((m, i) => {
+                if (m.score > bestScore) {
+                    bestScore = m.score;
+                    bestMove = i;
+                }
+            });
+        } else {
+            let bestScore = Infinity;
+            moves.forEach((m, i) => {
+                if (m.score < bestScore) {
+                    bestScore = m.score;
+                    bestMove = i;
+                }
+            });
+        }
+
+        return moves[bestMove];
+    }
+
+    function getWinnerState(b, player) {
+        return winCombos.some(combo =>
+            combo.every(i => b[i] === player)
+        );
+    }
+
+    function resetGame() {
+        board = Array(9).fill("");
+        gameActive = true;
+        statusText.textContent = "Your turn (X)";
+        createBoard();
+    }
+
+    createBoard();
+</script>
+
+</body>
+</html>

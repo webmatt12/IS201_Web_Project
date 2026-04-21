@@ -1,0 +1,208 @@
+/* =========================
+   BASE GLOBAL STYLES
+   ========================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+}
+
+/* Layout override (use carefully — was conflicting before) */
+.layout-body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 23px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+/* =========================
+   TEXT ELEMENTS
+   ========================= */
+
+li {
+    font-style: italic;
+    font-weight: normal;
+}
+
+ul {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    list-style-position: inside;
+    color: rgb(80, 80, 80);
+}
+
+ol {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    list-style-position: inside;
+    color: rgb(80, 80, 80);
+}
+
+/* =========================
+   LINKS
+   ========================= */
+
+a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    text-align: center;
+}
+
+a:hover {
+    color: rgb(21, 39, 209);
+    text-decoration: underline;
+}
+
+a:visited {
+    color: rgb(0, 0, 0);
+}
+
+/* =========================
+   TYPOGRAPHY HELPERS
+   ========================= */
+
+.resumelistheading {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+}
+
+.listheading {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: black;
+}
+
+.title {
+    text-align: center;
+    text-decoration: underline;
+}
+
+.center {
+    text-align: center;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.justify {
+    text-align: justify;
+}
+
+/* =========================
+   BOX / UTILITY STYLES
+   ========================= */
+
+.box1 {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.box2 {
+    padding: 5px;
+}
+
+.box3 {
+    margin: 50px;
+}
+
+.hyperlink {
+    color: blue;
+    text-decoration: underline;
+}
+
+/* =========================
+   LAYOUT SYSTEM (SCRATCH PAGE)
+   ========================= */
+
+.common {
+    position: absolute;
+}
+
+.mainheader {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 90px;
+    z-index: 2;
+    background-color: rgb(0, 0, 0);
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    padding-top: 5px;
+}
+
+.secondheader {
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    height: 25px;
+    padding-top: 5px;
+    padding-left: 5px;
+    z-index: 2;
+    background-color: lightgray;
+    text-align: left;
+    font-size: 15px;
+}
+
+.leftmenu {
+    top: 114px;
+    left: 5px;
+    width: 100px;
+    bottom: 39px;
+    z-index: 1;
+    padding-top: 80px;
+}
+
+.rightmenu {
+    top: 114px;
+    right: 5px;
+    width: 100px;
+    bottom: 39px;
+}
+
+.mainbody {
+    top: 114px;
+    right: 0px;
+    left: 0px;
+    bottom: 39px;
+    text-align: center;
+}
+
+.footer {
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 25px;
+    font-size: 9px;
+    text-align: center;
+    padding-top: 15px;
+    position: fixed;
+    z-index: 2;
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+/* =========================
+   OPTIONAL / NOT CURRENTLY USED (FROM OLD FILES)
+   ========================= */
+
+.homebg {
+    /* background-image: url('../Images/Background1.jpeg'); */
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Optional UI polish (not currently required but useful) */
+.section {
+    margin: 20px auto;
+    padding: 10px;
+    max-width: 900px;
+}

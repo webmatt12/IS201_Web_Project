@@ -73,25 +73,6 @@ a:visited {
     text-align: justify;
 }
 
-
-.box1 {
-    border-width: 1px;
-    border-style: solid;
-}
-
-.box2 {
-    padding: 5px;
-}
-
-.box3 {
-    margin: 50px;
-}
-
-.hyperlink {
-    color: blue;
-    text-decoration: underline;
-}
-
 .common {
     position: absolute;
 }
